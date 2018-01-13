@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-//use App\Http\Controllers\AccIndependentReviewerController;
 use Route;
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
