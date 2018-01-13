@@ -1,6 +1,12 @@
 {
     "name": "dweik/crud-generator",
-    "description": "it's a easy tool to generate crud functions for database tables",
+    "description": "it's a easy tool for laravel +5.1 to generate crud functions base database tables",
+    "keywords": [
+        "laravel", "crud", "generator", "generate",
+        "bootstrap", "mysql", "postgresql", "postgres",
+        "sqlite", "artisan", "commandline", "command-line"
+        "command", "route"
+    ],
     "license": "MIT",
     "authors": [
         {
