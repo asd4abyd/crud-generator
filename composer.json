@@ -1,0 +1,35 @@
+{
+    "name": "dweik/crud-generator",
+    "description": "it's a easy tool to generate crud functions for database tables",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "abdelqader osama",
+            "email": "asd.abyd@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "^5.0,<5.6",
+        "illuminate/console": "^5.0,<5.6",
+        "illuminate/filesystem": "^5.0,<5.6",
+        "symfony/class-loader": "^2.3|^3.0"
+    },
+    "require-dev": {
+        "illuminate/config": "^5.0,<5.6",
+        "illuminate/view": "^5.0,<5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dweik\\CrudGenerator\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Dweik\\CrudGenerator\\CrudGeneratorServiceProvider"
+            ]
+        }
+    }
+}

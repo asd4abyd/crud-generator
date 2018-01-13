@@ -1,0 +1,1 @@
+<textarea name="<?php echo $column['field'] ?>" id="<?php echo $column['field'] ?>" class="form-control">{{ App('request')->old('<?php echo $column['field'] ?>', $record['<?php echo $column['field'] ?>']?: '<?php echo $column['default'] ?>') }}</textarea>

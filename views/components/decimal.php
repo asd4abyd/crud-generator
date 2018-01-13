@@ -1,0 +1,1 @@
+<input name="<?php echo $column['field'] ?>" id="<?php echo $column['field'] ?>" type="text" value="{{ App('request')->old('<?php echo $column['field'] ?>', $record['<?php echo $column['field'] ?>']?: '<?php echo $column['default'] ?>') }}" class="form-control decimal">
