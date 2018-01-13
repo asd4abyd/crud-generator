@@ -65,16 +65,6 @@ class CrudGeneratorCommand extends Command
      */
     public function handle()
     {
-        if (file_exists(base_path() . '/vendor/compiled.php') ||
-            file_exists(base_path() . '/bootstrap/cache/compiled.php') ||
-            file_exists(base_path() . '/storage/framework/compiled.php')) {
-            $this->error(
-                'Error generating IDE Helper: first delete your compiled file (php artisan clear-compiled)'
-            );
-            return;
-        }
-
-
         $namespace = trim($this->option('namespace'));
 
         if($namespace!='') {
@@ -121,7 +111,7 @@ class CrudGeneratorCommand extends Command
 
 
         $this->line('');
-        $this->line("You have to add the following line to /config/app.php under 'providers' index to run CRUD routes:-");
+        $this->line('add the service provider to the `providers` array in `config/app.php`');
         $this->info('App\Providers\CrudRouteServiceProvider::class' );
         $this->line(PHP_EOL.PHP_EOL."Finish.");
 
