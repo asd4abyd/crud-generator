@@ -89,6 +89,11 @@ class CrudGeneratorCommand extends Command
 
         $models = [];
         foreach($explainTable->getTables() as $table) {
+
+            if($this->option('ignore-none-autoincrement') && !$explainTable->hasIdKey($table)) {
+                continue;
+            }
+
             $generator->generateController($table, $explainTable->getModelName($table), $namespace);
             $this->comment($explainTable->getModelName($table).' Controller has generated');
             $generator->generateModel($table, $explainTable->getModelName($table), $namespace);
