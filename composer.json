@@ -4,7 +4,7 @@
     "keywords": [
         "laravel", "crud", "generator", "generate",
         "bootstrap", "mysql", "postgresql", "postgres",
-        "sqlite", "artisan", "commandline", "command-line"
+        "sqlite", "artisan", "commandline", "command-line",
         "command", "route"
     ],
     "license": "MIT",
