@@ -44,11 +44,15 @@ class <?php echo $modelName ?>Controller extends Controller
      */
     public function create()
     {
+
+        $record = new <?php echo $modelName ?>();
+        $record = array_combine($record->getFillable(), array_fill(0, count($record->getFillable()), ''));
+
         return view('<?php echo $viewKey ?>.add_edit')
             ->with('titlePage', '<?php echo $tableTitleName ?>')
             ->with('title', 'Create New')
             ->with('panelTitle', '<?php echo $tableTitleName ?>')
-            ->with('record', new <?php echo $modelName ?>())
+            ->with('record', $record)
             ->with('update', false)
             ->with('link', route('<?php echo $modelName ?>.store'));
 
