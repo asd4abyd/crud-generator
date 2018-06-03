@@ -22,6 +22,11 @@ class ExplainTable
     private $connection;
     private $connectionType;
 
+
+    private $ignoredTables = [
+	    'migrations',
+	    'password_resets'
+    ];
     private $tables        = [];
     private $tablesColumns = [];
     private $idKey         = [];
@@ -113,6 +118,8 @@ class ExplainTable
 
     private function findTables() {
 
+	    $ignoredTables = $this->ignoredTables;
+
         switch ($this->connectionType) {
             case self::CONNECTION_MYSQL:
                 $sql = 'SHOW TABLES';
@@ -134,7 +141,11 @@ class ExplainTable
         }
 
         return collect(json_decode(json_encode(DB::connection($this->connection)->select($sql)), true))
-            ->map(function ($item) {
+            ->map(function ($item) use ($ignoredTables) {
+            	if(in_array(array_values($item)[0], $ignoredTables)) {
+            		return false;
+	            }
+
                 return array_values($item)[0];
             });
     }

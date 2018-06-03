@@ -28,7 +28,13 @@ return [
         'components.int',
         'components.text',
         'components.textarea',
-    ]
+    ],
+
+	'timestamp' => [
+		'created_at',
+		'updated_at',
+		'deleted_at'
+	]
 
 
 ];

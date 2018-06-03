@@ -15,7 +15,7 @@
             @endif
 
                 <?php foreach ($columns as $column):
-                if($column['increment']){
+                if($column['increment'] or in_array($column['field'], App()->config->get('crud-generator.timestamp'))){
                     continue;
                 }
                 ?>

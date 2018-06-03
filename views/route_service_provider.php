@@ -11,12 +11,21 @@ class CrudRouteServiceProvider extends ServiceProvider
 
     protected $namespace = 'App\Http\Controllers';
 
+<?php if(in_array(trim(substr($version, 0,3)), ['5.1', '5.2'])) { ?>
     public function boot(Router $router)
     {
         //
 
         parent::boot($router);
     }
+<?php } else { ?>
+    public function boot()
+    {
+        //
+
+        parent::boot();
+    }
+<?php } ?>
 
     public function map(Router $router)
     {

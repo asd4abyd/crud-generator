@@ -124,10 +124,27 @@ class Generator {
 
     public function getList($table) {
 
+    	$columns = $this->explainTable->getColumns($table);
+
+    	if(App()->config->get('crud-generator.hide_timestamps')){
+    		foreach ($columns as $key=>$column){
+    			if(in_array($column['field'], App()->config->get('crud-generator.timestamp'))){
+    				unset($columns[$key]);
+			    }
+		    }
+	    } else {
+		    foreach ($columns as $key=>$column){
+			    if(in_array($column['field'], ['deleted_at'])){
+				    unset($columns[$key]);
+				    break;
+			    }
+		    }
+	    }
+
         return $this->view->make($this->viewFiles['list'])
             ->with('modelName', $this->explainTable->getModelName($table))
             ->with('hasID', $this->explainTable->hasIdKey($table))
-            ->with('columns', $this->explainTable->getColumns($table))
+            ->with('columns', $columns)
             ->with('idKey', $this->explainTable->getIdKey($table))
             ->render();
     }
@@ -139,10 +156,13 @@ class Generator {
 
     public function getRouteProvider($namespace, $models) {
 
+	    $app = app();
+
         return $this->view->make($this->viewFiles['route'])
             ->with('models', $models)
             ->with('namespace', $namespace)
-            ->render();
+	        ->with('version', $app->version())
+	        ->render();
     }
 
 

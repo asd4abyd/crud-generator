@@ -1,6 +1,6 @@
 <?php echo "<?php" ?>
 
-/**
+/**php
 * A auto generate Controller for Laravel 5, to serve <<?php echo $tableName ?>> table
 * Generated for Laravel <?= $version ?> on <?= date("Y-m-d") ?>.
 *
@@ -10,7 +10,7 @@
 *
 */
 <?php
-$viewKey = str_replace('\\', ',', trim($namespace, '\\')).'.'.$modelName;
+$viewKey = trim(str_replace('\\', ',', trim($namespace, '\\')).'.'.$modelName, '.');
 ?>
 
 namespace App\Http\Controllers<?php echo $namespace ?>;

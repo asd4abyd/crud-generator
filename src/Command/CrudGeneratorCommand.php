@@ -44,6 +44,8 @@ class CrudGeneratorCommand extends Command
     /** @var \Illuminate\View\Factory */
     private $view;
 
+    private $app;
+
     /**
      * CrudGeneratorCommand constructor.
      * @param $config
@@ -55,7 +57,9 @@ class CrudGeneratorCommand extends Command
         $this->config = $config;
         $this->files = $files;
         $this->view = $view;
-        parent::__construct();
+	    $this->app = app();
+
+	    parent::__construct();
     }
 
     /**
@@ -77,7 +81,20 @@ class CrudGeneratorCommand extends Command
             $namespace = implode('\\', $namespace);
         }
 
-        $explainTable = new ExplainTable();
+	    $version = $this->app->version();
+
+	    if(!in_array(trim(substr($version, 0,3)), ['5.1']) and $this->option('make-auth')) {
+		    $this->call('make:auth');
+		    $this->call('migrate');
+	    }
+	    elseif($this->option('migrate')){
+		    $this->call('migrate');
+	    }
+
+	    $this->config->set('crud-generator.hide_timestamps', $this->option('hide-timestamps'));
+
+
+	    $explainTable = new ExplainTable();
 
         $generator = new Generator(
             $explainTable,
@@ -90,14 +107,18 @@ class CrudGeneratorCommand extends Command
         $models = [];
         foreach($explainTable->getTables() as $table) {
 
+            if($table===false) {
+                continue;
+            }
+
             if($this->option('ignore-none-autoincrement') && !$explainTable->hasIdKey($table)) {
                 continue;
             }
 
+	        $generator->generateModel($table, $explainTable->getModelName($table), $namespace);
+	        $this->comment($explainTable->getModelName($table).' Model has generated');
             $generator->generateController($table, $explainTable->getModelName($table), $namespace);
             $this->comment($explainTable->getModelName($table).' Controller has generated');
-            $generator->generateModel($table, $explainTable->getModelName($table), $namespace);
-            $this->comment($explainTable->getModelName($table).' Model has generated');
             $generator->generateAddEdit($table, $explainTable->getModelName($table), $namespace);
             $this->comment($explainTable->getModelName($table).' add_edit view has generated');
             $generator->generateList($table, $explainTable->getModelName($table), $namespace);
@@ -119,10 +140,6 @@ class CrudGeneratorCommand extends Command
         $this->line('add the service provider to the `providers` array in `config/app.php`');
         $this->info('App\Providers\CrudRouteServiceProvider::class' );
         $this->line(PHP_EOL.PHP_EOL."Finish.");
-
-
-
-
     }
 
 
@@ -145,10 +162,22 @@ class CrudGeneratorCommand extends Command
     {
         $namespace = $this->config->get('crud-generator.namespace');
 
-        return array(
-            array('over-write', "o", InputOption::VALUE_NONE, 'Allow to overwrite exist files'),
-            array('namespace', "s", InputOption::VALUE_OPTIONAL, 'Chose CRUD namespace', $namespace),
-            array('ignore-none-autoincrement', "i", InputOption::VALUE_NONE, 'Ignore tables which have no auto-increment field'),
-        );
+        $version = $this->app->version();
+
+	    $return =array();
+
+	    if(!in_array(trim(substr($version, 0,3)), ['5.1'])) {
+		    $return[] = array( 'make-auth', "a", InputOption::VALUE_NONE, 'Execute make:auth and migrate commands' );
+	    }
+
+		$return[] = array('migrate', "m", InputOption::VALUE_NONE, 'Execute migrate command');
+		$return[] = array('hide-timestamps', "t", InputOption::VALUE_NONE, 'Hide [created_at, updated_at and deleted_at] from add list');
+		$return[] = array('over-write', "o", InputOption::VALUE_NONE, 'Allow to overwrite exist files');
+		$return[] = array('namespace', "s", InputOption::VALUE_OPTIONAL, 'Chose CRUD namespace', $namespace);
+		$return[] = array('ignore-none-autoincrement', "i", InputOption::VALUE_NONE, 'Ignore tables which have no auto-increment field');
+
+
+
+        return $return;
     }
 }
